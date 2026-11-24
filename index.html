@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuración electrónica</title>
+<style>
+:root{--s:#1f6fe5;--p:#e8590c;--d:#2f9e44;--ink:#1d2433;--bg:#fff8ec;--card:#fff;--line:#d9d2c3;--pink:#e55b80}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:system-ui,"Segoe UI",Arial,sans-serif;color:var(--ink)}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center;background:var(--bg)}
+header{height:56px;display:flex;align-items:center;gap:10px;padding:0 24px;background:var(--pink)}
+header button{font:700 20px inherit;font-family:inherit;border:0;border-radius:12px;padding:9px 18px;background:#fff;color:var(--ink);cursor:pointer}
+header button.on{background:var(--ink);color:#fff}
+header .sp{flex:1}
+.scr{display:none;position:absolute;left:0;right:0;top:56px;bottom:0;padding:12px 24px;flex-direction:column;gap:10px}
+.scr.on{display:flex}
+h2{font-size:30px}
+.card{background:var(--card);border:3px solid var(--line);border-radius:18px;padding:14px}
+.big{font-size:24px;line-height:1.3}
+button.b{font-family:inherit;font-weight:800;font-size:26px;border:3px solid var(--ink);border-radius:14px;padding:10px 26px;background:#fff;cursor:pointer;min-height:56px}
+button.b:active{transform:scale(.97)}
+.bs{border-color:var(--s);color:var(--s)}.bp{border-color:var(--p);color:var(--p)}.bd{border-color:var(--d);color:var(--d)}
+.bs.on{background:var(--s);color:#fff}.bp.on{background:var(--p);color:#fff}.bd.on{background:var(--d);color:#fff}
+.cell{width:48px;height:48px;border:3px solid var(--c,#333);border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--ink);gap:0;line-height:1}
+.cell.hl{box-shadow:0 0 0 5px #ffd43b;background:#fff9db}
+.cs{--c:var(--s)}.cp{--c:var(--p)}.cd{--c:var(--d)}
+.banner{background:#fff3bf;border:3px solid #f2c200;border-radius:14px;padding:10px 18px;font-size:24px;font-weight:700;text-align:center}
+/* pantalla 1 */
+#s1 .row{display:flex;gap:16px;height:392px}
+#cloudCard{width:400px;text-align:center}
+#cloudCard p{font-size:20px;line-height:1.3;margin-top:6px}
+#shapeCard{flex:1;display:flex;flex-direction:column;gap:10px}
+.btns{display:flex;gap:12px;align-items:center}
+.btns span{font-size:22px;font-weight:700}
+#shapes{display:flex;gap:6px;justify-content:center;align-items:flex-end;flex:1}
+.fig{display:flex;flex-direction:column;align-items:center;gap:4px}
+.fig .lab{font-size:22px;font-weight:800}
+#cap{font-size:26px;font-weight:800;text-align:center}
+/* pantalla 2 */
+.lvl{display:flex;align-items:center;gap:14px;padding:8px 14px}
+.lvl .n{width:104px;font-size:26px;font-weight:800}
+.grp{display:flex;flex-direction:column;align-items:center;gap:2px;margin-right:16px}
+.grp .cell{width:44px;height:44px;font-size:22px;margin:0 2px}
+.grp .row2{display:flex}
+.grp .nm{font-size:24px;font-weight:800}
+.lvl .res{font-size:24px;font-weight:800;margin-left:auto;white-space:nowrap}
+#order{border:3px dashed #7048e8;background:#f3f0ff}
+#order h3{font-size:24px;color:#5f3dc4;margin-bottom:6px}
+.seq{display:flex;align-items:center;justify-content:center;gap:4px}
+.chip{position:relative;min-width:84px;text-align:center;padding:10px 8px;font-size:28px;font-weight:800;border-radius:30px;color:#fff}
+.chip i{position:absolute;top:-10px;left:-4px;background:var(--ink);color:#fff;font:700 15px system-ui;border-radius:50%;width:24px;height:24px;line-height:24px}
+.chip.s{background:var(--s)}.chip.p{background:var(--p)}.chip.d{background:var(--d)}
+.chip.jump{outline:5px solid #e03131;outline-offset:3px}
+.arr{font-size:30px;font-weight:800;color:#5f3dc4}
+.arr.jump{color:#e03131;font-size:40px}
+#toast{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:20px;padding:10px 20px;border-radius:12px;opacity:0;transition:opacity .3s;z-index:9}
+#boxes .grp .cell{width:54px;height:54px;font-size:32px}
+#boxes .grp .nm{font-size:22px}
+.grp .nm.c1{color:var(--s)}.grp .nm.c2{color:var(--p)}
+@keyframes pop{0%{transform:scale(0) translateY(10px)}70%{transform:scale(1.4)}100%{transform:scale(1)}}
+.new{display:inline-block;animation:pop .35s}
+.u{color:var(--ink)}
+.cols{display:flex;gap:16px;flex:1;min-height:0}
+#cfg{flex:1.1;display:flex;flex-direction:column;gap:6px;justify-content:center}
+#cfgTxt{font-size:48px;font-weight:800;display:flex;gap:16px;flex-wrap:wrap}
+#cfgTxt sup{font-size:.68em;vertical-align:.45em;line-height:0}
+#cfgTxt button{font:inherit;background:#fff;border:3px solid var(--line);border-radius:12px;padding:0 12px 4px;cursor:pointer;color:var(--ink)}
+#cfgTxt button.sel{border-color:#f2c200;background:#fff3bf}
+.hint{font-size:22px;font-weight:700;color:#5f3dc4}
+#info{flex:1;font-size:20px;line-height:1.35;display:flex;flex-direction:column;justify-content:center;gap:4px}
+#info .big2{font-size:38px;font-weight:800}
+#info .big2 sup{font-size:.7em}
+.k{display:inline-block;padding:0 8px;border-radius:8px;background:#fff3bf;font-weight:800}
+.ctrl{display:flex;gap:12px}
+.ctrl .b{font-size:24px;padding:8px 20px}
+.zbtn{font-size:24px!important}
+.zbtn.on{background:var(--ink);color:#fff}
+</style>
+</head>
+<body>
+<div id="stage">
+<header id="nav">
+  <button data-i="0" class="on">1 · ¿Dónde están?</button>
+  <button data-i="1">2 · Niveles y orbitales</button>
+  <div class="sp"></div>
+  <button id="fs">⛶ Pantalla completa</button>
+</header>
+
+<!-- PANTALLA 1 -->
+<section class="scr on" id="s1">
+  <div class="big"><b>La configuración electrónica</b> indica cómo se distribuyen los electrones de un átomo en sus niveles y subniveles de energía.</div>
+  <div class="row">
+    <div class="card" id="cloudCard">
+      <svg id="cloud" viewBox="-150 -115 300 230" width="372" height="246"></svg>
+      <p>Un <b>orbital</b> describe dónde es más probable encontrar un electrón. Dibujamos la región donde es más probable encontrarlo.</p>
+    </div>
+    <div class="card" id="shapeCard">
+      <div class="btns"><span>Elige un subnivel:</span>
+        <button class="b bs" data-t="s">s</button><button class="b bp" data-t="p">p</button><button class="b bd" data-t="d">d</button></div>
+      <div id="shapes"></div>
+      <div id="cap"></div>
+    </div>
+  </div>
+  <div class="banner">Cada casilla representa un orbital. En cada orbital caben como máximo 2 electrones.</div>
+</section>
+
+<!-- PANTALLA 2 -->
+<section class="scr" id="s2">
+  <div style="display:flex;align-items:center;gap:16px"><h2 id="t2">Niveles, subniveles y orbitales</h2>
+    <button class="b" id="capBtn" style="margin-left:auto">Ver capacidad máxima</button></div>
+  <div id="levels" style="display:flex;flex-direction:column;gap:8px"></div>
+</section>
+
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const COL={s:'#1f6fe5',p:'#e8590c',d:'#2f9e44'};
+const sup=n=>'<sup>'+n+'</sup>';
+/* escala para 1280x720 */
+function fit(){const k=Math.min(innerWidth/1280,innerHeight/720);$('#stage').style.transform='translate(-50%,-50%) scale('+k+')'}
+addEventListener('resize',fit);fit();
+/* navegación */
+let cur=0;
+function go(i){cur=Math.max(0,Math.min(1,i));$$('.scr').forEach((e,j)=>e.classList.toggle('on',j==cur));$$('#nav [data-i]').forEach((e,j)=>e.classList.toggle('on',j==cur))}
+$$('#nav [data-i]').forEach(b=>b.onclick=()=>go(+b.dataset.i));
+addEventListener('keydown',e=>{if(e.key=='ArrowRight')go(cur+1);if(e.key=='ArrowLeft')go(cur-1)});
+function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';$('#stage').appendChild(t)}t.textContent=m;t.style.opacity=1;clearTimeout(t.h);t.h=setTimeout(()=>t.style.opacity=0,5000)}
+function toggleFS(){
+  const d=document,el=d.documentElement,isFs=d.fullscreenElement||d.webkitFullscreenElement;
+  try{
+    const r=isFs?(d.exitFullscreen||d.webkitExitFullscreen).call(d):(el.requestFullscreen||el.webkitRequestFullscreen).call(el);
+    if(r&&r.catch)r.catch(()=>toast('Este visor bloquea la pantalla completa. Abre el archivo en el navegador o pulsa F11.'));
+  }catch(e){toast('Este visor bloquea la pantalla completa. Abre el archivo en el navegador o pulsa F11.')}
+}
+$('#fs').onclick=toggleFS;
+addEventListener('keydown',e=>{if(e.key=='f'||e.key=='F')toggleFS()});
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>{$('#fs').textContent=(document.fullscreenElement||document.webkitFullscreenElement)?'✕ Salir':'⛶ Pantalla completa';fit()}));
+
+/* ---------- PANTALLA 1 ---------- */
+(function(){
+  let h='<defs><filter id="bl"><feGaussianBlur stdDeviation="1.6"/></filter><radialGradient id="rg"><stop offset="0" stop-color="#1f6fe5" stop-opacity=".28"/><stop offset="1" stop-color="#1f6fe5" stop-opacity="0"/></radialGradient></defs>';
+  h+='<circle r="105" fill="url(#rg)"/><g filter="url(#bl)">';
+  for(let i=0;i<520;i++){const a=Math.random()*6.283,r=Math.sqrt(-2*Math.log(Math.random()+1e-9))*34;
+    h+=`<circle cx="${(Math.cos(a)*r).toFixed(1)}" cy="${(Math.sin(a)*r*.9).toFixed(1)}" r="2.6" fill="#1f6fe5" fill-opacity=".4"/>`}
+  h+='</g><circle r="9" fill="#d6336c"/><circle r="4" fill="#fff" fill-opacity=".5" cx="-2" cy="-2"/>';
+  h+='<text x="0" y="-98" text-anchor="middle" font-size="15" font-weight="700" fill="#1d2433">Nube de probabilidad</text>';
+  h+='<text x="14" y="26" font-size="13" font-weight="700" fill="#d6336c">núcleo</text>';
+  $('#cloud').innerHTML=h;
+})();
+const lobe=(a,l,w,c)=>`<ellipse cx="${l/2}" cy="0" rx="${l/2}" ry="${w}" transform="rotate(${a})" fill="${c}" fill-opacity=".45" stroke="${c}" stroke-width="2"/>`;
+const pair=(a,l,w,c)=>lobe(a,l,w,c)+lobe(a+180,l,w,c);
+const quad=(o,l,w,c)=>[0,90,180,270].map(a=>lobe(a+o,l,w,c)).join('');
+const svg=(inner,c)=>`<svg viewBox="-50 -50 100 100" width="106" height="106">${inner}<circle r="3" fill="#1d2433"/></svg>`;
+const SH={
+ s:[['s',svg(`<circle r="32" fill="${COL.s}" fill-opacity=".4" stroke="${COL.s}" stroke-width="2"/>`)]],
+ p:[['p<sub>x</sub>',svg(pair(0,46,11,COL.p))],['p<sub>y</sub>',svg(pair(90,46,11,COL.p))],['p<sub>z</sub>',svg(pair(45,40,10,COL.p))]],
+ d:[['d<sub>xy</sub>',svg(quad(45,40,9,COL.d))],['d<sub>x²−y²</sub>',svg(quad(0,40,9,COL.d))],
+    ['d<sub>xz</sub>',svg(`<g transform="scale(1.1 .6)">${quad(45,40,9,COL.d)}</g>`)],['d<sub>yz</sub>',svg(`<g transform="scale(.6 1.1)">${quad(45,40,9,COL.d)}</g>`)],
+    ['d<sub>z²</sub>',svg(pair(90,46,9,COL.d)+`<ellipse rx="22" ry="6" fill="none" stroke="${COL.d}" stroke-width="3"/>`)]]
+};
+function show1(t){
+  $$('#shapeCard [data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
+  const n=SH[t].length;
+  $('#shapes').innerHTML=SH[t].map(x=>`<div class="fig">${x[1]}<div class="cell c${t}" style="--c:${COL[t]}"></div><div class="lab" style="color:${COL[t]}">${x[0]}</div></div>`).join('');
+  $('#cap').innerHTML=`<span style="color:${COL[t]}">Subnivel ${t}</span>: ${n} orbital${n>1?'es':''} · ${n} casilla${n>1?'s':''} · <u>Capacidad total: ${2*n} electrones</u>`;
+}
+$$('#shapeCard [data-t]').forEach(b=>b.onclick=()=>show1(b.dataset.t));
+show1('s');
+
+/* ---------- PANTALLA 2 ---------- */
+const LV=[[1,[['s',1]]],[2,[['s',1],['p',3]]],[3,[['s',1],['p',3],['d',5]]]];
+let full=false;
+function r2(){
+  $('#t2').textContent=full?'Capacidad máxima de cada nivel':'Niveles, subniveles y orbitales';
+  $('#capBtn').textContent=full?'Ocultar capacidad':'Ver capacidad máxima';
+  $('#levels').innerHTML=LV.map(([n,sub])=>{
+    const g=sub.map(([t,k])=>`<div class="grp"><div class="row2">${Array.from({length:k},()=>`<div class="cell c${t}">${full?'↑↓':''}</div>`).join('')}</div><div class="nm" style="color:${COL[t]}">${n}${t}</div></div>`).join('');
+    const ks=sub.map(x=>x[1]),es=ks.map(k=>2*k),sm=a=>a.reduce((x,y)=>x+y,0);
+    const res=full?(es.length>1?es.join(' + ')+' = ':'')+`<span style="color:#c92a2a">${sm(es)} electrones</span>`:(ks.length>1?ks.join(' + ')+' = ':'')+sm(ks)+(sm(ks)>1?' casillas':' casilla');
+    return `<div class="card lvl"><div class="n">Nivel ${n}</div>${g}<div class="res">${res}</div></div>`}).join('');
+}
+$('#capBtn').onclick=()=>{full=!full;r2()};r2();
+
+</script>
+</body>
+</html>
